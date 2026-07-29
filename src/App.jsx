@@ -907,13 +907,10 @@ export default function App() {
               <span>LeetCode Progress Explorer • Powered by alfa-leetcode-api</span>
             </div>
             <div className="flex items-center gap-4 font-mono text-[11px]">
-              <span onClick={() => setUserModalOpen(true)} className="hover:text-blue-500 cursor-pointer">
-                Handle: {currentUser ? `@${currentUser}` : 'None'}
+              <span  className="hover:text-blue-500 cursor-pointer">
+                <a href="https://github.com/harshcans"> Made with ❤️ harshcans</a>
               </span>
-              <span>•</span>
-              <span onClick={handleUnlinkUser} className="hover:text-rose-500 cursor-pointer">
-                Reset Handle
-              </span>
+            
             </div>
           </div>
         </footer>
@@ -972,27 +969,7 @@ export default function App() {
                 </div>
               </div>
 
-              {/* Sample Quick Select Handles */}
-              <div>
-                <span className="text-[10px] text-slate-400 uppercase font-semibold block mb-2 font-sans">
-                  Or pick a sample handle:
-                </span>
-                <div className="flex items-center gap-2 flex-wrap font-mono text-[11px]">
-                  {['tourist', 'lee215', 'striver', 'neal_wu'].map((demo) => (
-                    <button
-                      key={demo}
-                      type="button"
-                      onClick={() => {
-                        setInputHandle(demo);
-                        loadUserProfile(demo);
-                      }}
-                      className="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-blue-500 hover:text-blue-500 transition-all"
-                    >
-                      @{demo}
-                    </button>
-                  ))}
-                </div>
-              </div>
+             
             </form>
 
             {currentUser && (
