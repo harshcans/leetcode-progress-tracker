@@ -14,7 +14,7 @@ A modern, responsive, glassmorphic web dashboard built with **React** and **Tail
 - ⚔️ **Rival Battle Matrix**: Side-by-side comparison matrix allowing you to input any second LeetCode handle and compare your progress head-to-head.
 - 🔐 **Zero Default User Setup**: Prompts for a manual username input on first load with automatic **7-day `localStorage` expiration**.
 - 🎨 **Glassmorphic UI & Dark Mode**: Features a sleek light glassmorphic backdrop (`backdrop-filter: blur(42px)`) alongside a high-contrast dark mode toggle.
-- 🔗 **Direct Profile Access**: One-click shortcuts to open the target profile directly on LeetCode (`https://leetcode.com/u/<username>`).
+- 🔗 **Direct Profile Access**: One-click shortcuts to open the target profile directly on LeetCode (`https://leetcode.com/u/<harshcans>`).
 - 🛡️ **Fault-Tolerant Fetching**: Graceful error handling for missing endpoints (such as 404s on user skills) so the main dashboard never crashes.
 
 ---
