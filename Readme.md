@@ -2,7 +2,7 @@
 
 A modern, responsive, glassmorphic web dashboard built with **React** and **Tailwind CSS** to track LeetCode statistics, analyze topic-wise skill distributions, and compare performance head-to-head with rivals in real-time using the `alfa-leetcode-api`.
 
-🔗 **Live Demo:** [https://leetcode-progress-tracker-nine.vercel.app/](https://leetcode-track-progress.vercel.app/)
+🔗 **Live Demo:** [https://leetcode-track-progress.vercel.app/](https://leetcode-track-progress.vercel.app/)
 
 ---
 
