@@ -9,9 +9,8 @@ import {
 const API_BASE = "https://alfa-leetcode-api.onrender.com";
 const STORAGE_KEY = "lc_explorer_username";
 const STORAGE_EXPIRY_KEY = "lc_explorer_timestamp";
-const EXPIRY_DAYS = 7; // Store handle for 7 days
+const EXPIRY_DAYS = 7; 
 
-// Helper to check and retrieve stored user
 const getStoredUsername = () => {
   try {
     const username = localStorage.getItem(STORAGE_KEY);
@@ -33,7 +32,7 @@ const getStoredUsername = () => {
   }
 };
 
-// Helper to save user in storage
+
 const setStoredUsername = (username) => {
   try {
     localStorage.setItem(STORAGE_KEY, username);
@@ -43,7 +42,7 @@ const setStoredUsername = (username) => {
   }
 };
 
-// Helper to clear stored user
+
 const clearStoredUsername = () => {
   try {
     localStorage.removeItem(STORAGE_KEY);
@@ -57,7 +56,7 @@ const fetchLeetCodeProfile = async (username) => {
   const cleanUser = username.trim().toLowerCase();
   if (!cleanUser) throw new Error("Please enter a valid LeetCode handle.");
 
-  // Parallel fetch from alfa-leetcode-api endpoints
+  
   const [profileRes, solvedRes, contestRes] = await Promise.allSettled([
     fetch(`${API_BASE}/userProfile/${cleanUser}`).then(r => r.json()),
     fetch(`${API_BASE}/${cleanUser}/solved`).then(r => r.json()),
@@ -68,18 +67,18 @@ const fetchLeetCodeProfile = async (username) => {
   const solvedData = solvedRes.status === 'fulfilled' ? solvedRes.value : {};
   const contestData = contestRes.status === 'fulfilled' ? contestRes.value : {};
 
-  // Verify if user exists or if API returned an error
+ 
   if (profileData.errors || profileData.message === "user does not exist" || (!profileData.username && !solvedData.solvedProblem)) {
     throw new Error(`LeetCode handle "@${cleanUser}" was not found or has no public profile.`);
   }
 
-  // Parse solved breakdown
+
   const easySolved = solvedData.easySolved || profileData.easySolved || 0;
   const mediumSolved = solvedData.mediumSolved || profileData.mediumSolved || 0;
   const hardSolved = solvedData.hardSolved || profileData.hardSolved || 0;
   const totalSolved = solvedData.solvedProblem || (easySolved + mediumSolved + hardSolved) || 0;
 
-  // Derive skill levels based on solved counts
+  
   const calcScore = (factor) => Math.min(100, Math.max(30, Math.round((totalSolved * factor) % 60 + 40)));
   const topicStats = [
     { topic: 'Arrays & Strings', score: calcScore(0.85) },
@@ -90,7 +89,6 @@ const fetchLeetCodeProfile = async (username) => {
     { topic: 'Searching & Sorting', score: calcScore(0.80) }
   ];
 
-  // Identify strengths & weaknesses
   const sortedTopics = [...topicStats].sort((a, b) => b.score - a.score);
   const strength = sortedTopics[0].topic;
   const weakness = sortedTopics[sortedTopics.length - 1].topic;
@@ -122,24 +120,23 @@ export default function App() {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [activeTab, setActiveTab] = useState('dashboard'); // 'dashboard', 'battle', 'analytics'
+  const [activeTab, setActiveTab] = useState('dashboard'); 
   const [theme, setTheme] = useState('dark');
   
-  // Modal & Search Input State
   const [userModalOpen, setUserModalOpen] = useState(false);
   const [inputHandle, setInputHandle] = useState('');
   const [headerSearch, setHeaderSearch] = useState('');
   
-  // Battle Matrix State
+  
   const [battleInput1, setBattleInput1] = useState('lee215');
   const [battleInput2, setBattleInput2] = useState('striver');
   const [battleResults, setBattleResults] = useState([]);
   const [battleLoading, setBattleLoading] = useState(false);
 
-  // Toast Notification State
+
   const [toastMessage, setToastMessage] = useState(null);
 
-  // Trigger Toast Notification
+  
   const showToast = useCallback((msg) => {
     setToastMessage(msg);
     setTimeout(() => {
@@ -153,12 +150,11 @@ export default function App() {
       setCurrentUser(stored);
       loadUserProfile(stored, false);
     } else {
-      // Default: No user loaded! Prompt user setup modal
       setUserModalOpen(true);
     }
   }, []);
 
-  // Update HTML body theme class
+  
   useEffect(() => {
     if (theme === 'dark') {
       document.documentElement.classList.add('dark');
@@ -186,7 +182,7 @@ export default function App() {
     }
   };
 
-  // Handle User Input Submission
+  
   const handleUserSubmit = (e) => {
     e.preventDefault();
     if (inputHandle.trim()) {
@@ -194,7 +190,7 @@ export default function App() {
     }
   };
 
-  // Handle Quick Search Submission
+  
   const handleHeaderSearch = (e) => {
     e.preventDefault();
     if (headerSearch.trim()) {
@@ -203,7 +199,7 @@ export default function App() {
     }
   };
 
-  // Unlink/Logout current user
+  
   const handleUnlinkUser = () => {
     clearStoredUsername();
     setCurrentUser(null);
@@ -212,7 +208,6 @@ export default function App() {
     showToast("Handle unlinked. Please enter a LeetCode handle.");
   };
 
-  // Run Battle Comparison Analysis
   const runBattleComparison = async () => {
     if (!userData) {
       showToast("Please link a primary profile first.");
@@ -268,9 +263,9 @@ export default function App() {
 
       const totalVal = Math.max(1, easy + medium + hard);
       const slices = [
-        { val: easy, color: '#10B981' },   // Green Easy
-        { val: medium, color: '#F59E0B' }, // Yellow Medium
-        { val: hard, color: '#EF4444' }    // Red Hard
+        { val: easy, color: '#10B981' },   
+        { val: medium, color: '#F59E0B' }, 
+        { val: hard, color: '#EF4444' }   
       ];
 
       let startAngle = -Math.PI / 2;
@@ -308,10 +303,10 @@ export default function App() {
       background: 'radial-gradient(circle at 10% 20%, rgba(59, 130, 246, 0.08) 0%, transparent 40%), radial-gradient(circle at 90% 80%, rgba(99, 102, 241, 0.08) 0%, transparent 40%), #F8FAFC'
     } : {}}>
 
-      {/* SIDEBAR NAVIGATION */}
+      
       <aside className="w-full md:w-64 bg-white/80 dark:bg-[#111827]/90 backdrop-blur-md border-b md:border-b-0 md:border-r border-slate-200 dark:border-slate-800 flex-shrink-0 flex flex-col justify-between md:h-screen md:sticky md:top-0 z-40">
         <div>
-          {/* Logo */}
+      
           <div className="p-5 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
             <div className="flex items-center gap-3 cursor-pointer" onClick={() => setActiveTab('dashboard')}>
               <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center text-white shadow-lg shadow-blue-500/25">
@@ -368,7 +363,7 @@ export default function App() {
           </nav>
         </div>
 
-        {/* Sidebar Footer User Connection Quick Bar */}
+        
         <div className="p-4 border-t border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
           <div className="flex items-center justify-between text-xs font-mono">
             <div className="flex items-center gap-2">
@@ -391,7 +386,7 @@ export default function App() {
       {/* MAIN CONTENT AREA */}
       <div className="flex-1 flex flex-col min-w-0 min-h-screen">
         
-        {/* HEADER BAR */}
+        
         <header className="sticky top-0 z-30 backdrop-blur-xl bg-white/70 dark:bg-[#090D16]/80 border-b border-slate-200 dark:border-slate-800 px-4 sm:px-8 py-3.5 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <h1 className="text-lg font-bold text-slate-900 dark:text-white hidden sm:block">
@@ -400,7 +395,7 @@ export default function App() {
               {activeTab === 'analytics' && 'DSA Diagnostic Gap Analysis'}
             </h1>
 
-            {/* Quick Handle Search Form */}
+            
             <form onSubmit={handleHeaderSearch} className="relative flex items-center w-48 sm:w-64">
               <Search className="w-3.5 h-3.5 absolute left-3 text-slate-400" />
               <input
@@ -414,7 +409,7 @@ export default function App() {
           </div>
 
           <div className="flex items-center gap-3">
-            {/* Theme Toggle Button */}
+            
             <button
               onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
               className="p-2 rounded-xl bg-slate-100 dark:bg-[#111827] border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-all shadow-sm"
@@ -423,7 +418,7 @@ export default function App() {
               {theme === 'dark' ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-blue-600" />}
             </button>
 
-            {/* User Profile Pill / Account Changer */}
+            
             <div
               onClick={() => setUserModalOpen(true)}
               className="flex items-center gap-2.5 bg-slate-100 dark:bg-[#111827] border border-slate-200 dark:border-slate-800 p-1.5 pr-3 rounded-xl cursor-pointer hover:border-blue-500/50 transition-all"
@@ -454,7 +449,7 @@ export default function App() {
         {/* MAIN BODY AREA */}
         <main className="p-4 sm:p-8 flex-1 w-full max-w-7xl mx-auto space-y-8">
 
-          {/* UNLINKED/NO USER BANNER */}
+          
           {!currentUser && (
             <div className="bg-gradient-to-r from-blue-900/30 via-slate-900 to-slate-900 border border-blue-500/40 rounded-2xl p-6 relative overflow-hidden shadow-2xl">
               <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative z-10">
@@ -482,15 +477,15 @@ export default function App() {
             </div>
           )}
 
-          {/* TAB 1: DASHBOARD VIEW */}
+          
           {activeTab === 'dashboard' && currentUser && (
             <div className="space-y-8">
               
-              {/* Profile Card Header */}
+              
               <div className="bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 rounded-2xl p-6 sm:p-8 relative overflow-hidden shadow-xl">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
                   
-                  {/* User Meta Info */}
+              
                   <div className="flex items-center gap-5">
                     <div className="relative group cursor-pointer" onClick={() => setUserModalOpen(true)} title="Click to change handle">
                       <img
@@ -512,7 +507,7 @@ export default function App() {
                           {userData?.badge || 'Knight'}
                         </span>
                         
-                        {/* Direct LeetCode External Profile Opener Button */}
+                      
                         <a
                           href={`https://leetcode.com/u/${userData?.username || currentUser}`}
                           target="_blank"
@@ -542,7 +537,7 @@ export default function App() {
                     </div>
                   </div>
 
-                  {/* Top Stats Cards */}
+                
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 font-mono">
                     <div className="bg-slate-50 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 p-3.5 rounded-xl text-center">
                       <span className="text-[10px] text-slate-400 block uppercase font-semibold">Contest Rating</span>
@@ -563,10 +558,10 @@ export default function App() {
                 </div>
               </div>
 
-              {/* PROBLEM BREAKDOWN & TOPIC STATS GRID */}
+    
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                 
-                {/* Solved Problems Donut & Breakdown */}
+              
                 <div className="lg:col-span-5 bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 rounded-2xl p-6 flex flex-col justify-between shadow-lg">
                   <div>
                     <div className="flex items-center justify-between mb-4">
@@ -578,7 +573,7 @@ export default function App() {
                       </span>
                     </div>
 
-                    {/* Donut Canvas */}
+                    
                     <DonutChart
                       easy={userData?.easySolved || 0}
                       medium={userData?.mediumSolved || 0}
@@ -587,7 +582,7 @@ export default function App() {
                     />
                   </div>
 
-                  {/* Difficulty Progress Bars */}
+          
                   <div className="space-y-3 font-mono text-xs mt-6">
                     <div>
                       <div className="flex justify-between mb-1">
@@ -642,7 +637,7 @@ export default function App() {
                       </span>
                     </div>
 
-                    {/* Topic Horizontal Skill Bars */}
+                
                     <div className="space-y-3 my-4">
                       {userData?.topics?.map((item, i) => (
                         <div key={i} className="space-y-1">
@@ -679,7 +674,7 @@ export default function App() {
 
               </div>
 
-              {/* AI WEAK-SPOT ACTION PLAN BANNER */}
+    
               <div className="bg-gradient-to-r from-blue-950/40 via-slate-900 to-slate-900 border border-blue-500/30 rounded-2xl p-6 shadow-xl">
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                   <div className="flex items-start gap-4">
@@ -707,7 +702,7 @@ export default function App() {
             </div>
           )}
 
-          {/* TAB 2: MULTI-USER BATTLE / COMPARISON VIEW */}
+    
           {activeTab === 'battle' && (
             <div className="space-y-8">
               <div className="bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-lg">
@@ -722,7 +717,7 @@ export default function App() {
                   </div>
                 </div>
 
-                {/* Handle Input Inputs */}
+  
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6 font-mono text-xs">
                   <div className="flex items-center gap-2 bg-slate-50 dark:bg-slate-900 p-3 rounded-xl border border-slate-200 dark:border-slate-800">
                     <span className="text-blue-500 font-bold">#1</span>
@@ -917,7 +912,6 @@ export default function App() {
 
       </div>
 
-      {/* USER HANDLE SETUP / CHANGE MODAL */}
       {userModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 rounded-2xl w-full max-w-md p-6 relative shadow-2xl space-y-5">
